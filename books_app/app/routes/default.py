@@ -2,6 +2,7 @@ from . import app
 from db import Config,Book
 from sqlalchemy import select
 from ..schemas import CreateBook
+from fastapi import status
 
 
 Session=Config.SESSION
@@ -13,7 +14,7 @@ def all_books():
         books=session.scalars(select(Book)).all()
         return books
 
-@app.post("/books",status_code=201)
+@app.post("/books",status_code=status.HTTP_201_CREATED)
 def create_book(data:CreateBook):
     with Session.begin() as session:
         book = Book(**data.model_dump())
